@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Service class for managing quiz completions. Provides functionality for creating quiz completions
  * and retrieving completion data for quizzes based on user identification.
@@ -50,6 +52,7 @@ public class QuizCompletionService {
      * @param user The user who completed the quiz.
      * @param quiz The quiz that was completed.
      */
+    @Transactional
     public void createCompleted(User user, Quiz quiz) {
         QuizCompletion completion = new QuizCompletion();
         completion.setQuiz(quiz);

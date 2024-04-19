@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.stream.Collector;
 
 /**
  * Service class for managing user data. This includes loading user details,
@@ -55,6 +57,7 @@ public class UserService implements UserDetailsService {
      * @return User The registered user with encrypted password.
      * @throws UsernameBadRequestException If the email is already taken.
      */
+    @Transactional
     public User registerUser(User user) {
         if (existsByEmail(user.getEmail())) {
             throw new UsernameBadRequestException("Email address " + user.getEmail() + " is already taken.");
@@ -62,7 +65,6 @@ public class UserService implements UserDetailsService {
         user.setPassword(encodePassword(user.getPassword()));
         return repository.save(user);
     }
-
     /**
      * Encodes the password using the configured password encoder.
      *

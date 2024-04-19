@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class QuizzService {
      * @param user The user who creates the quiz.
      * @return The saved quiz.
      */
+    @Transactional
     public Quiz createQuiz(Quiz quiz, User user) {
         quiz.setUser(user);
         return quizRepository.save(quiz);
@@ -83,6 +85,7 @@ public class QuizzService {
      * @return Feedback indicating whether the answers were correct or not.
      * @throws QuizNotFoundException if the quiz cannot be found.
      */
+    @Transactional
     public Feedback solveQuiz(Long id, QuizAnswer answer, User user) throws QuizNotFoundException {
        Quiz quiz = getQuizById(id);
         boolean isCorrect = areAnswersCorrect(answer.getAnswer(),quiz.getAnswer());
@@ -110,6 +113,7 @@ public class QuizzService {
      * @param userEmail The email of the user attempting to delete the quiz.
      * @throws UnauthorizedAccessException if the user is not authorized to delete the quiz.
      */
+    @Transactional
     public void deleteQuiz(Long quizId, String userEmail) {
         if (getQuizById(quizId).getUser().getEmail().equals(userEmail)) {
             quizRepository.deleteById(quizId);
